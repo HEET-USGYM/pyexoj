@@ -5,7 +5,8 @@ ImageJ2/Fiji plugin for automated detection and analysis of exocytosis events in
 (e.g. CD63-pHluorin MVB–plasma-membrane fusion, VAMP2-pHluorin).
 
 pyexoj runs the same three steps as ExoJ 1.9.2 (spot detection, tracking, event identification) without
-Fiji or a GUI, gives the same spots, tracks and events, and adds exact speed-ups (multi-process, GPU).
+Fiji or a GUI, gives the same spots, tracks and events, and adds exact speed-ups: on a dense 2048² movie,
+925 s → 79 s on the CPU alone, and 18.6 s with spot detection on a GPU, with byte-identical results.
 It is not affiliated with or endorsed by the ExoJ authors. **If you use it, cite ExoJ:**
 
 > Liu J., Verweij F.J., van Niel G., Galli T., Danglot L., Bun P. (2024). ExoJ: an ImageJ2/Fiji plugin for
@@ -63,21 +64,33 @@ of the original ExoJ 1.9.2 jar on the same movie (`tests/data/exoj_1.9.2/`, made
 Steps 1 and 2 reproduce ExoJ's float32/float64 arithmetic in the same order. The port was also checked on
 real CD63 TIRF movies (same spots, tracks and events as ExoJ).
 
-## Speed (all options give byte-identical outputs)
+## Speed: up to ~50× faster, with identical results
+
+On a dense movie (2048 × 2048 pixels, 601 frames, ~1,150 spots per frame, 8,016 events; Ryzen 7 7700X,
+Radeon RX 6800 XT):
+
+| Run | Time | Speed-up |
+|---|---|---|
+| pyexoj reference code (one process, operations in ExoJ's order) | 925 s | 1× |
+| `workers=8, fast="inplace"` (CPU only) | **79 s** | **12×** |
+| `workers=8, fast="inplace", device="cuda:0"` (spot detection on the GPU) | **18.6 s** | **~50×** |
+
+Every option gives **byte-identical output files** to the reference code: the same spots, tracks, events,
+fit values and traces, not "nearly the same". What each option does:
 
 | Option | What it does |
 |---|---|
-| `workers=8` | step 1 (frames) and step 3 (tracks) in forked processes |
-| `fast="inplace"` | wavelet smoothing in preallocated buffers; no whole-frame copy per spot; grid search for link candidates |
-| `device="cuda:0"` | step 1 on a GPU (PyTorch, CUDA or ROCm): element-wise float32 in the reference order, exact `kthvalue` medians |
+| `workers=8` | frames (step 1) and tracks (step 3) in parallel processes |
+| `fast="inplace"` | wavelet smoothing in preallocated buffers; reads each spot's pixels without copying the whole frame; looks for link candidates on a grid instead of comparing every spot pair |
+| `device="cuda:0"` | step 1 on a GPU (PyTorch, CUDA or ROCm), with float32 arithmetic in the reference's order and exact medians |
 
-Example: 2048 × 2048 × 601 frames, ~1,150 spots per frame, 8,016 events (Ryzen 7 7700X, Radeon RX 6800 XT):
-reference 925 s; `workers=8, fast="inplace"` 79 s; plus `device="cuda:0"` 18.6 s (detection 7.7 s, tracking
-4.7 s, events 6.2 s). More than 8 workers did not help on that 8-core CPU. `tests/test_exactness.py` checks
-the options against the reference code; **run it on your own GPU and driver before relying on the GPU path**
-(checked on Radeon RX 9070 XT and RX 6800 XT, ROCm). The GPU path covers wavelet detection (ExoJ's default);
-other detection settings run on the CPU. With `workers > 1`, don't run other threads in the calling process
-(fork).
+(ExoJ itself was not timed on this movie; on small synthetic movies the reference code is somewhat faster
+than ExoJ run through Fiji.) In the 18.6 s, detection takes 7.7 s, tracking 4.7 s and events 6.2 s; at that point reading the movie from
+disk takes about as long as analysing it. More than 8 workers did not help on that 8-core CPU.
+`tests/test_exactness.py` checks every option against the reference code. **Run it on your own GPU and driver
+before relying on the GPU path** (checked on Radeon RX 9070 XT and RX 6800 XT, ROCm). The GPU path covers
+wavelet detection (ExoJ's default); other detection settings run on the CPU. With `workers > 1`, don't run other
+threads in the calling process (it uses fork).
 
 ## Tests
 
