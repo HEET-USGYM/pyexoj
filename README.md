@@ -99,4 +99,4 @@ original program as described above.
 ## Licence
 
 GPL-3.0-or-later (`LICENSE`), as a derived work of ExoJ.
-ExoJ: Copyright (C) 2022 Liu Junjun, Bun Philippe. pyexoj: Copyright (C) 2026 <your name>.
+ExoJ: Copyright (C) 2022 Liu Junjun, Bun Philippe. pyexoj: Copyright (C) 2026 HEET-USGYM.
