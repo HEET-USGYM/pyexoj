@@ -1,0 +1,11 @@
+Ref	Property	Begin Frame	Duration	Peak Frame	Position (x,y)	Max. Displacement (pixels)	τ (sec)	R² for Decay Est.	dF/σ (MAD)	F0	ΔF	R² for Gaussian fit	Size (FWHM, microns)
+1	Automatic	15	18	20	49,63	0	2.359	0.971	13.394	440	262	N/A	N/A
+2	Automatic	66	18	71	73,75	0	3.39	0.962	10.117	457	456	N/A	N/A
+3	Automatic	74	18	79	96,51	0	2.521	0.968	10.432	453	233	N/A	N/A
+4	Automatic	78	18	83	36,16	0	1.587	0.98	11.691	444	364	N/A	N/A
+5	Automatic	90	18	95	86,35	0	1.661	0.994	20.711	446	522	N/A	N/A
+6	Automatic	93	18	98	15,60	0	3.111	0.961	11.242	416	319	N/A	N/A
+7	Automatic	104	18	109	70,34	0	2.627	0.954	8.91	445	273	N/A	N/A
+8	Automatic	109	18	114	52,78	0	2.961	0.966	13.282	446	234	N/A	N/A
+9	Automatic	111	18	116	95,68	0	2.361	0.98	11.537	449	339	N/A	N/A
+10	Automatic	115	18	120	20,25	0	2.366	0.991	13.397	455	549	N/A	N/A

@@ -1,0 +1,9 @@
+settings <test dir>/cfg_B3.properties
+input <test dir>/synth.tif 112x96 frames=160 bitDepth=16 px=0.065 micron dt=0.5 s
+dF movie on
+step 1 done: spots=10 (1.0 s)
+step 2 done: tracks=10 (1.6 s)
+step 3 done: events=10 (2.2 s)
+wrote ExoJ table: rows=10
+wrote events + traces: 10
+status ok total 2.2 s
