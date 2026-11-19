@@ -1,8 +1,7 @@
 # pyexoj
 
 An **unofficial** Python port of [ExoJ](https://github.com/zs6e/excytosis-analyzer-plugin) 1.9.2, the
-ImageJ2/Fiji plugin for automated detection and analysis of exocytosis events in TIRF time series
-(e.g. CD63-pHluorin MVB–plasma-membrane fusion, VAMP2-pHluorin).
+ImageJ2/Fiji plugin for automated detection and analysis of exocytosis events in TIRF time series.
 
 pyexoj runs the same three steps as ExoJ 1.9.2 (spot detection, tracking, event identification) without
 Fiji or a GUI, gives the same spots, tracks and events, and adds exact speed-ups: on a dense 2048² movie,
@@ -62,7 +61,7 @@ of the original ExoJ 1.9.2 jar on the same movie (`tests/data/exoj_1.9.2/`, made
   where τ is not determined in either program. ExoJ itself varies by ~1e-6 between runs.
 
 Steps 1 and 2 reproduce ExoJ's float32/float64 arithmetic in the same order. The port was also checked on
-real CD63 TIRF movies (same spots, tracks and events as ExoJ).
+real TIRF movies (same spots, tracks and events as ExoJ).
 
 ## Speed: up to ~50× faster, with identical results
 
